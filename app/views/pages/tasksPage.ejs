@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+    <% if (token.role === 'CUSTOMER') { %>
+    <main>
+        <div class="jumbotron">
+            <h1>Interface for CUSTOMER</h1>
+        </div>
+    </main>
+    <% } else if (token.role === 'REVIEWER') { %>
+    <main>
+        <div class="jumbotron">
+            <h1>Interface for REVIEWER</h1>
+        </div>
+    </main>
+    <% } else if (token.role === 'DEVELOPER') { %>
+    <main>
+        <div class="jumbotron">
+            <h1>Interface for DEVELOPER</h1>
+        </div>
+    </main>
+    <% } %>
+</body>
+
+</html>

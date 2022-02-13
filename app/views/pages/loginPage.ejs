@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+<main>
+    <div class="jumbotron">
+        <h1>login</h1>
+        <form action="">
+            <div class="form-group">
+                <label for="email">login:</label>
+                <input type="email" class="form-control" id="login">
+            </div>
+            <div class="form-group">
+                <label for="pwd">Password:</label>
+                <input type="password" class="form-control" id="pwd">
+            </div>
+            <button id="submitBtn" type="submit" class="btn btn-primary">Вход</button>
+        </form>
+        <div id="res"></div>
+    </div>
+</main>
+
+<script>
+    
+    var login = () => {
+        let json = JSON.stringify({
+            username: $('#login').val(), 
+            password: $('#pwd').val()
+        }); 
+        
+        // 1. Создаём новый XMLHttpRequest-объект
+        let xhr = new XMLHttpRequest();
+
+        // 2. Настраиваем его: GET-запрос по URL /article/.../load
+        xhr.open('POST', '/auth/login');
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+        // 3. Отсылаем запрос
+        xhr.send(json);
+
+        // 4. Этот код сработает после того, как мы получим ответ сервера
+        xhr.onload = function() {
+          if (xhr.status != 200) { // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
+            $('#res').append(`Ошибка ${xhr.status}: ${xhr.statusText}`); // Например, 404: Not Found
+          } else { // если всё прошло гладко, выводим результат
+//            $('#res').append(`Готово, получили ${xhr.response.length} байт`); // response -- это ответ сервера
+            $('#res').append(`${JSON.parse(xhr.response).token}`); // response -- это ответ сервера
+          }
+        };
+
+        xhr.onprogress = function(event) {
+          if (event.lengthComputable) {
+            $('#res').append(`Получено ${event.loaded} из ${event.total} байт`);
+          } else {
+            $('#res').append(`Получено ${event.loaded} байт`); // если в ответе нет заголовка Content-Length
+          }
+
+        };
+
+        xhr.onerror = function() {
+            console.log("Запрос не удался");
+            $('#res').append("Запрос не удался");
+        };
+    }
+    
+    $('#submitBtn').on("click", (e) => {
+        e.preventDefault;
+        e.stopPropagation;
+        login()
+    }); 
+    
+</script>
+
+</body>
+</html>
