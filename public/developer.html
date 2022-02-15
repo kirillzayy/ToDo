@@ -63,7 +63,7 @@
         </header>
         <div class="top_bar">
             <div class="add_task">
-                <div class="btn">
+                <div class="btn" onclick="createNewTask();">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M4 3H20C20.2652 3 20.5196 3.10536 20.7071 3.29289C20.8946 3.48043 21 3.73478 21 4V20C21 20.2652 20.8946 20.5196 20.7071 20.7071C20.5196 20.8946 20.2652 21 20 21H4C3.73478 21 3.48043 20.8946 3.29289 20.7071C3.10536 20.5196 3 20.2652 3 20V4C3 3.73478 3.10536 3.48043 3.29289 3.29289C3.48043 3.10536 3.73478 3 4 3ZM11 11H7V13H11V17H13V13H17V11H13V7H11V11Z" fill="#616161" />
                     </svg>
@@ -179,38 +179,67 @@
     <script>
     function createRow(data) {
         console.log(data[0], "ДАТА");
-        let row = document.createElement('div');
-        row.className = 'row';
+        for (let task of data) {
+            let row = document.createElement('div');
+            row.className = 'row';
 
-        let custom_checkbox = document.createElement('div');
-        custom_checkbox.className = 'custom_checkbox';
-        custom_checkbox.innerHTML = '<input class="custom-checkbox" type="checkbox" id="color-4" name="color-4" value="green">';
-        row.append(custom_checkbox);
+            let custom_checkbox = document.createElement('div');
+            custom_checkbox.className = 'custom_checkbox';
+            custom_checkbox.innerHTML = '<input class="custom-checkbox" type="checkbox" id="color-4" name="color-4" value="green">';
+            row.append(custom_checkbox);
 
-        let status = document.createElement('div');
-        status.className = 'status';
-        status.innerHTML = '<div>' + data[0].status + '</div>';
-        row.append(status);
+            let status = document.createElement('div');
+            status.className = 'status';
+            status.innerHTML = '<div>' + task.status + '</div>';
+            row.append(status);
 
-        let clock = document.createElement('div');
-        clock.className = 'clock';
-        clock.innerHTML = '<div>' + data[0].hours + '</div>';
-        row.append(clock);
+            let clock = document.createElement('div');
+            clock.className = 'clock';
+            clock.innerHTML = '<div>' + task.hours + '</div>';
+            row.append(clock);
 
-        let description = document.createElement('div');
-        description.className = 'description';
-        description.innerHTML = '<div>Описание задачи</div>';
-        row.append(description);
+            let description = document.createElement('div');
+            description.className = 'task_description';
+            description.innerHTML = '<div>' + task.description + '</div>';
+            row.append(description);
 
-        let btn_primery = document.createElement('div');
-        btn_primery.className = 'btn_primery';
-        btn_primery.innerHTML = '<div class="btn btn_primery">Подтвердить</div>';
-        row.append(btn_primery);
+            let btn_primery = document.createElement('div');
+            btn_primery.className = 'action';
+            btn_primery.innerHTML = '<div class="btn btn_primery">Подтвердить</div>';
+            row.append(btn_primery);
 
-        let table_body = document.querySelector('.table_body');
-        table_body.append(row);
+            let table_body = document.querySelector('.table_body');
+            table_body.append(row);
+        }
     }
+    function clearRows() {
+        let table_body = document.querySelector('.table_body');
+        table_body.innerHTML = '';
+    }
+    function createNewTask() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/tasks/add');
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        let data = {
+            status: 'new',
+            hours: '4',
+            description: 'Do 4'
+        }
+        let jsonData = JSON.stringify(data);
+        xhr.send(jsonData);
 
+        xhr.onload = function() {
+            if (xhr.status != 200) {
+                console.log(xhr.status, xhr.statusText);
+            } else {
+                let result = JSON.parse(xhr.response);
+                result = [result];
+                console.log(JSON.parse(xhr.response));
+                createRow(result);
+
+            }
+        };
+    }
     function requestTasks(argument) {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', '/api/tasks')
@@ -227,6 +256,7 @@
             if (xhr.status != 200) {
                 console.log(xhr.status, xhr.statusText);
             } else {
+                clearRows();
                 console.log(JSON.parse(xhr.response));
                 createRow(JSON.parse(xhr.response));
             }
@@ -236,6 +266,7 @@
             console.log("Запрос не удался");
         };
     }
+    requestTasks();
     </script>
 </body>
 
