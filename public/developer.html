@@ -88,10 +88,6 @@
         <div class="table_tasks">
             <div class="table_header">
                 <div class="header_row">
-                    <div class="checkbox">
-                        <input class="custom-checkbox" type="checkbox" id="color-1" name="color-1" value="indigo">
-                        <label for="color-1"></label>
-                    </div>
                     <div class="status">
                         <div>
                             Статус
@@ -111,8 +107,8 @@
             <div class="table_body">
                 <div class="row">
                     <div class="checkbox">
-                        <input class="custom-checkbox" type="checkbox" id="color-2" name="color-2" value="red">
-                        <label for="color-2"></label>
+                        <input type="checkbox" class="custom-checkbox" id="happy1" name="happy" value="yes">
+                        <label for="happy1"></label>
                     </div>
                     <div class="status">
                         <div>
@@ -133,8 +129,8 @@
                 </div>
                 <div class="row">
                     <div class="checkbox">
-                        <input class="custom-checkbox" type="checkbox" id="color-3" name="color-3" value="yellow">
-                        <label for="color-3"></label>
+                        <input type="checkbox" class="custom-checkbox" id="happy2" name="happy" value="yes">
+                        <label for="happy2"></label>
                     </div>
                     <div class="status">
                         <div>
@@ -153,10 +149,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" data-task="1234">
                     <div class="checkbox">
-                        <input class="custom-checkbox" type="checkbox" id="color-4" name="color-4" value="green">
-                        <label for="color-4"></label>
+                        <input type="checkbox" class="custom-checkbox" id="happy3" name="happy" value="yes">
+                        <label for="happy3"></label>
                     </div>
                     <div class="status">
                         <div>Статус</div>
@@ -177,16 +173,32 @@
         </div>
     </div>
     <script>
+        function myFuncClick(event){
+            console.log("Клик мыши", event.target);
+            let elem = event.target;
+            elem.style.background = 'green';
+        }
+
+        function changeStatus(id, status){
+            console.log("Задача  айди " + id + " подтверждена");
+        }
+        function myFuncHover(){
+            console.log("На элемент наведен курсор мыши");
+        }
     function createRow(data) {
         console.log(data[0], "ДАТА");
         for (let task of data) {
             let row = document.createElement('div');
             row.className = 'row';
+            row.dataset.task = task._id;
 
-            let custom_checkbox = document.createElement('div');
-            custom_checkbox.className = 'custom_checkbox';
-            custom_checkbox.innerHTML = '<input class="custom-checkbox" type="checkbox" id="color-4" name="color-4" value="green">';
-            row.append(custom_checkbox);
+            let checkbox = document.createElement('div');
+            checkbox.className = 'checkbox';
+            checkbox.innerHTML = '<input type="checkbox" class="custom-checkbox" id="' + task._id + '" name="' + task._id + '">';
+            checkbox.innerHTML += '<label for="' + task._id + '"></label>';
+            row.append(checkbox);
+
+            
 
             let status = document.createElement('div');
             status.className = 'status';
@@ -203,19 +215,42 @@
             description.innerHTML = '<div>' + task.description + '</div>';
             row.append(description);
 
+            let div_action = document.createElement('div');
+            div_action.className = 'action';
+            row.append(div_action);
+
             let btn_primery = document.createElement('div');
-            btn_primery.className = 'action';
-            btn_primery.innerHTML = '<div class="btn btn_primery">Подтвердить</div>';
-            row.append(btn_primery);
+            btn_primery.className = 'btn btn_primery';
+            btn_primery.innerHTML = 'Подтвердить';
+            div_action.append(btn_primery);
 
             let table_body = document.querySelector('.table_body');
             table_body.append(row);
+
+            // row.addEventListener('click', myFuncClick);
+            // row.addEventListener('mouseenter', myFuncHover);
+            btn_primery.addEventListener('click',(e) => {
+                let event = e;
+                
+                let row = e.currentTarget.parentElement.parentElement;
+                console.log(row.dataset.task);
+                // console.log(e.currentTarget);
+                // console.log(e.currentTarget.parentElement);
+                // console.log(e.currentTarget.parentElement.parentElement);
+                let id, status;
+                changeStatus(row.dataset.task);
+            });
+            // btn_primery.addEventListener('click', changeStatus);
         }
     }
+
+
+
     function clearRows() {
         let table_body = document.querySelector('.table_body');
         table_body.innerHTML = '';
     }
+
     function createNewTask() {
         let xhr = new XMLHttpRequest();
         xhr.open('POST', '/api/tasks/add');
@@ -240,6 +275,7 @@
             }
         };
     }
+
     function requestTasks(argument) {
         let xhr = new XMLHttpRequest();
         xhr.open('GET', '/api/tasks')
