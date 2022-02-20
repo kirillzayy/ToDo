@@ -181,6 +181,53 @@
 
         function changeStatus(id, status){
             console.log("Задача  айди " + id + " подтверждена");
+            let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/tasks/edit');
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        let data2 = {
+            status2: "confirmed",
+             _id2: "айди",
+        }
+        let jsonData2 = JSON.stringify(data2);
+        xhr.send(jsonData2);
+
+        xhr.onload = function() {
+            if (xhr.status2 != 200) {
+                console.log(xhr.status2, xhr.statusText2);
+            } else {
+                let result2 = JSON.parse(xhr.response2);
+                result2 = [result2];
+                console.log(JSON.parse(xhr.response2));
+                createRow(result2);
+
+            }
+        };
+        function requestTasks(argument) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/tasks/edit')
+
+        // 1. Создаём новый XMLHttpRequest-объект
+        // 2. Настраиваем его: GET-запрос по URL /article/.../load
+        // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+        // 3. Отсылаем запрос
+        xhr.send();
+
+        // 4. Этот код сработает после того, как мы получим ответ сервера
+        xhr.onload = function() {
+            if (xhr.status2 != 200) {
+                console.log(xhr.status2, xhr.statusText2);
+            } else {
+                clearRows();
+                console.log(JSON.parse(xhr.response2));
+                createRow(JSON.parse(xhr.response2));
+            }
+        };
+
+        xhr.onerror = function() {
+            console.log("Запрос не удался");
+        };
+    }
         }
         function myFuncHover(){
             console.log("На элемент наведен курсор мыши");
