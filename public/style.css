@@ -339,3 +339,48 @@ header .text_header {
 .custom-checkbox:disabled+label::before {
   background-color: #e9ecef;
 }
+
+.clock:hover, .task_description:hover, .status:hover {
+    box-shadow: inset 0 0 2px 2px green;
+    cursor: pointer;
+}
+
+.clock.editing div {
+    display: none;
+}
+
+.clock.editing input {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border: none;
+    background: #b9ffb9;
+    outline: 0;
+    padding: 12px;
+}
+
+.clock.editing {
+    padding: 0;
+}
+
+.task_description.editing div {
+    display: none;
+}
+
+.task_description.editing input {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border: none;
+    background: #b9ffb9;
+    outline: 0;
+    padding: 12px;
+}
+
+.task_description.editing {
+    padding: 0;
+}
+
+.status.editing div {
+    display: none;
+}

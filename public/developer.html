@@ -173,6 +173,15 @@
         </div>
     </div>
     <script>
+
+        const STATUS_TITLES = {
+            new: "Новая",
+            progress: "Выполняется",
+            sentToConfirm: "Отправлено на подтверждение",
+            confirmed: "Подтверждена",
+            taskOnClock: "Запрос на вывод часов",
+            paid: "Выплачено",
+        };
         function myFuncClick(event){
             console.log("Клик мыши", event.target);
             let elem = event.target;
@@ -242,11 +251,9 @@
             checkbox.innerHTML += '<label for="' + task._id + '"></label>';
             row.append(checkbox);
 
-            
-
             let status = document.createElement('div');
             status.className = 'status';
-            status.innerHTML = '<div>' + task.status + '</div>';
+            status.innerHTML = '<div>' + STATUS_TITLES[task.status] + '</div>';
             row.append(status);
 
             let clock = document.createElement('div');
@@ -268,6 +275,7 @@
             btn_primery.innerHTML = 'Подтвердить';
             div_action.append(btn_primery);
 
+
             let table_body = document.querySelector('.table_body');
             table_body.append(row);
 
@@ -286,6 +294,90 @@
                 status = 'confirmed';
                 changeStatus(id, status);
             });
+            let changeCellData = (e) => {
+                let targetElem = e.currentTarget;
+                let targetClassName = targetElem.className;
+                let id = targetElem.parentElement.dataset.task;
+                if(targetElem.classList.contains("editing")){
+                        return;
+                    }
+                targetElem.classList.add("editing");
+                if(targetClassName != "status"){
+                    let input = document.createElement("input");
+                    input.type = "text";
+                    targetElem.append(input);
+                    input.addEventListener('blur', () => {
+                        targetElem.classList.remove('editing');
+                        let newValue = input.value;
+                        input.remove();
+                        targetElem.children[0].innerHTML = newValue;
+                        //save данных введенех в инпут
+                        let xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/api/tasks/edit');
+                        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                        let data = {
+                            _id: id,
+                        }
+                        if(targetElem.classList.contains("clock")){
+                            data.hours = newValue;
+                        }
+                        if(targetElem.classList.contains("task_description")){
+                            data.description = newValue;
+                        }
+                        let jsonData = JSON.stringify(data);
+                        xhr.send(jsonData);
+
+                        xhr.onload = function() {
+                            if (xhr.status != 200) {
+                                console.log(xhr.status, xhr.statusText);
+                            } else {
+                                let result = JSON.parse(xhr.response);
+                                requestTasks();
+                            }
+                        };
+                    })
+                } else{
+                    let select = document.createElement("select");
+                    select.innerHTML = `
+                        <option value="new">${STATUS_TITLES["new"]}</option>
+                        <option value="progress">${STATUS_TITLES["progress"]}</option>
+                        <option value="sentToConfirm">${STATUS_TITLES["sentToConfirm"]}</option>
+                        <option value="confirmed">${STATUS_TITLES["confirmed"]}</option>
+                        <option value="taskOnClock">${STATUS_TITLES["taskOnClock"]}</option>
+                        <option value="paid">${STATUS_TITLES["paid"]}</option>
+                    `;
+                    targetElem.append(select);
+                    select.addEventListener('change', () => {
+                        targetElem.classList.remove('editing');
+                        let newValue = select.options[select.selectedIndex].text;
+                        select.remove();
+                        targetElem.children[0].innerHTML = newValue;
+                        //save данных селект на сервер
+                        let xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/api/tasks/edit');
+                        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                        let data = {
+                            _id: id,
+                            status: select.value,
+                        }
+                        let jsonData = JSON.stringify(data);
+                        xhr.send(jsonData);
+
+                        xhr.onload = function() {
+                            if (xhr.status != 200) {
+                                console.log(xhr.status, xhr.statusText);
+                            } else {
+                                let result = JSON.parse(xhr.response);
+                                requestTasks();
+                            }
+                        };
+                    });
+                }
+                
+            }
+            status.addEventListener('click', changeCellData);
+            clock.addEventListener('click', changeCellData);
+            description.addEventListener('click', changeCellData);
             // btn_primery.addEventListener('click', changeStatus);
         }
     }

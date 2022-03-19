@@ -17,7 +17,7 @@ class tasksController {
         //Запросить все задачи
         try {
             
-            const tasks = await Task.find({ deleted: false, status: "new" }).exec();
+            const tasks = await Task.find({ deleted: false, /*status: "new" || "progress" */}).exec();
             
             return res.json(tasks)
             
