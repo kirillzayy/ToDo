@@ -340,6 +340,28 @@ function createNewTask() {
   };
 }
 
+// let fn = (fnAfterCounting) => {
+//   let t = 2;
+//   for (i=0;i<50000;i++) {
+//     t+=2;
+//   }
+//   fnAfterCounting(t)
+//   //console.log("страница загружена")
+// }
+
+// let consoleCb = (t) => {
+//   console.log("Я вызвал эту функцию из консоли, t =" + t)
+// }
+
+// let initCb = (t) => {
+//   console.log("Я вызвал эту функцию из консоли, t =" + (t + 90))
+// }
+
+// let myFunc1 = initCb;
+
+// fn();
+//fn(Я вызвал эту функцию из консоли, t = ...)
+
 function requestTasks(callback) {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/api/tasks");
@@ -356,14 +378,31 @@ function requestTasks(callback) {
     if (xhr.status != 200) {
       console.log(xhr.status, xhr.statusText);
     } else {
+      const data = JSON.parse(xhr.response);
       clearRows();
-      console.log(JSON.parse(xhr.response));
-      createRow(JSON.parse(xhr.response));
+      console.log(data);
+      createRow(data);
       if(SORT != ""){
         taskSort();
       }
+
+      if (ROLE === "customer") {
+
+        let counter = 0; 
+        
+        data.forEach((item)=>{
+            counter += item.hours
+        })
+  
+        let str = "Всего: " + counter + " часов | " + (counter * 80) + " рублей"
+        console.log(str)
+  
+        document.querySelector(".top_bar .info_work").innerText = str
+  
+      }
+
       if(callback){
-        callback();
+        callback(data);
       }
     }
   };
@@ -375,11 +414,14 @@ function requestTasks(callback) {
 document.addEventListener("DOMContentLoaded", () => {
   taskSortInit();
   ROLE = document.body.className;
-  requestTasks(() => {
+
+  let cb = (data) => {
     if (ROLE === "reviewer") {
       taskFilterInit("progress");
     } else {
       taskFilterInit();
     }
-  });
+  }
+
+  requestTasks(cb);
 });

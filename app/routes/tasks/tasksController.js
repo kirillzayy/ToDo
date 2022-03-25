@@ -18,6 +18,8 @@ class tasksController {
         try {
             
             const tasks = await Task.find({ deleted: false, /*status: "new" || "progress" */}).exec();
+            // const tasks = await Task.find({ deleted: false, status: "taskOnClock"}).exec();
+            // const tasks = await Task.find({ deleted: false}).exec();
             
             return res.json(tasks)
             
