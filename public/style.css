@@ -169,6 +169,7 @@ header .text_header {
     min-width: 127px;
     background: #45ADB4;
     margin-left: 1050px;
+    border: none;
 }
 
 .categories_tabs ul li {
