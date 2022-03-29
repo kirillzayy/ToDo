@@ -39,7 +39,11 @@ const start = async () => {
             //определяю роль и даю нужный шаблон, по умолчанию dev
             res.render('./pages/tasksPage', { 
                 token : {
-                    role: 'DEVELOPER'
+                    // role: 'DEVELOPER',
+                    // role: 'CUSTOMER',
+                    role: 'DEVELOPER',
+                    theme: 'light',
+                    name: 'Kirill',
                 }
             })
         })

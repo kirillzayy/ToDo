@@ -143,6 +143,18 @@ function changeStatus(id, status) {
 function myFuncHover() {
   console.log("На элемент наведен курсор мыши");
 }
+const nextStatus = (currentStatus) => {
+
+  let nStatus;
+  let statuses = ["new", "progress", "sentToConfirm", "confirmed", "taskOnClock", "paid"];
+  for(let i = 0;i < statuses.length;i++){
+  if(currentStatus == statuses[i]){
+    nStatus = statuses[i + 1];
+  }
+    /*  */
+  }
+  return nStatus;
+}
 function createRow(data) {
   console.log(data[0], "ДАТА");
   for (let task of data) {
@@ -203,19 +215,15 @@ function createRow(data) {
     let table_body = document.querySelector(".table_body");
     table_body.append(row);
 
-    // row.addEventListener('click', myFuncClick);
-    // row.addEventListener('mouseenter', myFuncHover);
     btn_primery.addEventListener("click", (e) => {
       let event = e;
 
       let row = e.currentTarget.parentElement.parentElement;
       console.log(row.dataset.task);
-      // console.log(e.currentTarget);
-      // console.log(e.currentTarget.parentElement);
-      // console.log(e.currentTarget.parentElement.parentElement);
+
       let id, status;
       id = row.dataset.task;
-      status = "confirmed";
+      status = nextStatus(task.status);
       changeStatus(id, status);
     });
     let changeCellData = (e) => {

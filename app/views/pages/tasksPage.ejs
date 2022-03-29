@@ -1,30 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <%- include('../partials/head'); %>
-</head>
+    <head>
+        <title>Задачи для - <%= token.role.toLowerCase() %></title>
 
-<body class="container">
-    <% if (token.role === 'CUSTOMER') { %>
-    <main>
-        <div class="jumbotron">
-            <h1>Interface for CUSTOMER</h1>
-        </div>
-    </main>
-    <% } else if (token.role === 'REVIEWER') { %>
-    <main>
-        <div class="jumbotron">
-            <h1>Interface for REVIEWER</h1>
-        </div>
-    </main>
-    <% } else if (token.role === 'DEVELOPER') { %>
-    <main>
-        <div class="jumbotron">
-            <h1>Interface for DEVELOPER</h1>
-        </div>
-    </main>
-    <% } %>
-</body>
+        <%- include('../partials/head'); %>
+
+    </head>
+
+    <body class="<%= token.role.toLowerCase() %>">
+        <% if (token.role === 'CUSTOMER') { %>
+
+            <%- include('../partials/customer'); %>
+
+        <% } else if (token.role === 'REVIEWER') { %>
+
+            <%- include('../partials/reviewer'); %>
+
+        <% } else if (token.role === 'DEVELOPER') { %>
+
+            <%- include('../partials/developer'); %>
+
+        <% } %>
+    </body>
 
 </html>

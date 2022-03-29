@@ -251,7 +251,12 @@ header .text_header {
     display: inline-block;
     background: url(img/icon_arrow.svg);
 }
-
+.arrow:hover{
+    box-shadow: inset 0 0 2px 2px green;
+    transition: 0.5s cubic-bezier(.69,.17,.96,.02);
+    cursor: pointer;
+    border-radius: 50%;
+}
 .row {
     border-bottom: 1px solid #E0E0E0;
 }
@@ -366,6 +371,7 @@ header .text_header {
 
 .table_body .clock:hover, .table_body .task_description:hover, .table_body .status:hover {
     box-shadow: inset 0 0 2px 2px green;
+    transition: 0.5s cubic-bezier(.69,.17,.96,.02);
     cursor: pointer;
 }
 
