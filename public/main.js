@@ -11,19 +11,15 @@
 // var f2 = new n(4);
 // // console.log(n.numbers(10));
 
-
-
-
 let SORT = "";
-
 
 const taskSort = () => {
   let rowCollection = document.querySelectorAll(".table_body .row");
   let arr = [];
   rowCollection.forEach((row) => {
     arr.push(row);
-  })
-  if(SORT !== ""){
+  });
+  if (SORT !== "") {
     arr.sort(function (a, b) {
       let value1 = a.querySelector("." + SORT).firstChild.textContent;
       let value2 = b.querySelector("." + SORT).firstChild.textContent;
@@ -40,23 +36,21 @@ const taskSort = () => {
   clearRows();
   arr.forEach((row) => {
     document.querySelector(".table_body").append(row);
-  })
-}
-
+  });
+};
 
 const taskSortInit = () => {
   let buttons = document.querySelectorAll(".table_header .arrow");
   buttons.forEach((arrow) => {
     arrow.addEventListener("click", (e) => {
       let nameArrow = e.currentTarget.parentElement.className;
-      if(SORT == "" || SORT != nameArrow){
+      if (SORT == "" || SORT != nameArrow) {
         SORT = nameArrow;
-      } else if(SORT == nameArrow){
+      } else if (SORT == nameArrow) {
         SORT = "";
       }
       console.log(SORT);
       taskSort();
-
     });
   });
 };
@@ -108,10 +102,18 @@ let taskFilterInit = (defaultStatus) => {
 const STATUS_TITLES = {
   new: "Новая",
   progress: "Выполняется",
-  sentToConfirm: "Отправлено на подтверждение",
+  sentToConfirm: "Проверяется",
   confirmed: "Подтверждена",
   taskOnClock: "Запрос на вывод часов",
-  paid: "Выплачено",
+  paid: "Закрыта",
+};
+const STATUS_BUTTON_ACTIONS = {
+  new: "Вернуть на доработку",
+  progress: "Приступить к задаче",
+  sentToConfirm: "Отправить на подтверждение",
+  confirmed: "Подтвердить",
+  taskOnClock: "Запрос на вывод часов",
+  paid: "Закрыть задачу",
 };
 function myFuncClick(event) {
   console.log("Клик мыши", event.target);
@@ -144,17 +146,25 @@ function myFuncHover() {
   console.log("На элемент наведен курсор мыши");
 }
 const nextStatus = (currentStatus) => {
-
   let nStatus;
-  let statuses = ["new", "progress", "sentToConfirm", "confirmed", "taskOnClock", "paid"];
-  for(let i = 0;i < statuses.length;i++){
-  if(currentStatus == statuses[i]){
-    nStatus = statuses[i + 1];
+  let statuses = [
+    "new",
+    "progress",
+    "sentToConfirm",
+    "confirmed",
+    "taskOnClock",
+    "paid",
+  ];
+  for (let i = 0; i < statuses.length; i++) {
+    if (currentStatus == statuses[i]) {
+      nStatus = statuses[i + 1];
+    }
   }
-    /*  */
+  if(nStatus == undefined){
+    nStatus = statuses[statuses.length - 1];
   }
   return nStatus;
-}
+};
 function createRow(data) {
   console.log(data[0], "ДАТА");
   for (let task of data) {
@@ -209,8 +219,10 @@ function createRow(data) {
 
     let btn_primery = document.createElement("div");
     btn_primery.className = "btn btn_primery";
-    btn_primery.innerHTML = "Подтвердить";
-    div_action.append(btn_primery);
+    btn_primery.innerHTML = STATUS_BUTTON_ACTIONS[nextStatus(task.status)];
+    if(task.status != "paid"){
+      div_action.append(btn_primery);
+    }
 
     let table_body = document.querySelector(".table_body");
     table_body.append(row);
@@ -390,26 +402,24 @@ function requestTasks(callback) {
       clearRows();
       console.log(data);
       createRow(data);
-      if(SORT != ""){
+      if (SORT != "") {
         taskSort();
       }
 
       if (ROLE === "customer") {
+        let counter = 0;
 
-        let counter = 0; 
-        
-        data.forEach((item)=>{
-            counter += item.hours
-        })
-  
-        let str = "Всего: " + counter + " часов | " + (counter * 80) + " рублей"
-        console.log(str)
-  
-        document.querySelector(".top_bar .info_work").innerText = str
-  
+        data.forEach((item) => {
+          counter += item.hours;
+        });
+
+        let str = "Всего: " + counter + " часов | " + counter * 80 + " рублей";
+        console.log(str);
+
+        document.querySelector(".top_bar .info_work").innerText = str;
       }
 
-      if(callback){
+      if (callback) {
         callback(data);
       }
     }
@@ -429,7 +439,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       taskFilterInit();
     }
-  }
+  };
 
   requestTasks(cb);
 });

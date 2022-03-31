@@ -276,8 +276,11 @@ header .text_header {
 .task_description {
     padding-left: 45px;
     flex: 1 0;
+    max-width: 100%;
 }
-
+.task_description div {
+    font-size: 15px;
+}
 .header_row .task_description {
     background: url(img/description.svg);
     background-repeat: no-repeat;
@@ -290,7 +293,7 @@ header .text_header {
 }
 
 .table_header {
-    height: 70px;
+    max-height: 70px;
 }
 
 .custom-checkbox {
@@ -413,4 +416,7 @@ header .text_header {
 
 .status.editing div {
     display: none;
+}
+@media (max-width: 1200px) {
+    
 }
