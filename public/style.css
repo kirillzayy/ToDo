@@ -417,6 +417,27 @@ header .text_header {
 .status.editing div {
     display: none;
 }
+.categories_tabs button{
+    display: none;
+}
+
 @media (max-width: 1200px) {
-    
+    .categories_tabs button{
+        display: block;
+    }
+    .categories_tabs button:hover + ul{
+        display: block;
+    }
+    .categories_tabs ul {
+        position: absolute;
+        /* left: 0; */
+        /* top: 0; */
+        display: none;
+        background: red;
+        height: auto;
+    }
+    .categories_tabs ul li {
+        display: block;
+        height: 25px;
+    }
 }
