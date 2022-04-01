@@ -20,7 +20,20 @@
       </div>
     </div>
     <div class="categories_tabs">
-      <button>=</button>
+      <label for="check">
+        <input onclick="btnClick()" type="checkbox" class="dropbtn" id="check"/> 
+        <div id="myDropdown" class="dropdown-content">
+        <a href=""><li class="active" data-status="">Все</li></a>
+        <a href=""><li class="new" data-status="">Новые</li></a>
+        <a href=""><li class="progress" data-status="">В процессе</li></a>
+        <a href=""><li class="sentToConfirm" data-status="">Отправленные на подтв</li></a>
+        <a href=""><li class="confirmed" data-status="">Подтверждена</li></a>
+        <a href=""><li class="taskOnClock" data-status="">Закрытые</li></a>
+        </div>
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
       <ul>
         <li class="active" data-status="">Все</li>
         <li data-status="new">Новые</li>

@@ -160,7 +160,7 @@ const nextStatus = (currentStatus) => {
       nStatus = statuses[i + 1];
     }
   }
-  if(nStatus == undefined){
+  if (nStatus == undefined) {
     nStatus = statuses[statuses.length - 1];
   }
   return nStatus;
@@ -220,7 +220,7 @@ function createRow(data) {
     let btn_primery = document.createElement("div");
     btn_primery.className = "btn btn_primery";
     btn_primery.innerHTML = STATUS_BUTTON_ACTIONS[nextStatus(task.status)];
-    if(task.status != "paid"){
+    if (task.status != "paid") {
       div_action.append(btn_primery);
     }
 
@@ -443,3 +443,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   requestTasks(cb);
 });
+
+// btn menu
+
+// здесь я реализовал функция вывода блока очень просто по сравнению с предыдущей
+
+function btnClick() {
+  // document.getElementById("myDropdown").classList.toggle("show");
+  let x = document.getElementById("myDropdown");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+
+// Close the dropdown if the user clicks outside of it
+// window.onclick = function (event) {
+//   if (!event.target.matches(".dropbtn")) {
+//     var dropdowns = document.getElementsByClassName("dropdown-content");
+//     for (let i = 0; i < dropdowns.length; i++) {
+//       var openDropdown = dropdowns[i];
+//       if (openDropdown.classList.contains("show")) {
+//         openDropdown.classList.remove("show");
+//       }
+//     }
+//   }
+// };
