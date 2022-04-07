@@ -4,10 +4,11 @@ const crypto    = require('crypto')
 const jwt       = require('jsonwebtoken')
 const { auth }  = require('../../../config')
 
-const generateAccessToken = (id, roles) => {
+const generateAccessToken = (id, roles, name) => {
     const payload = {
         id,
-        roles
+        roles,
+        name
     }
     
     return jwt.sign(payload, auth.secret, {expiresIn: '24h'})
@@ -48,7 +49,8 @@ class authController {
             
             if (!validPassword) res.status(400).json({message: `Неверный пароль`})
             
-            const token = generateAccessToken(user._id, user.roles)
+            const token = generateAccessToken(user._id, user.roles, user.username)
+
             return res.json({token})
             
         } catch (e) {

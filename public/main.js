@@ -286,13 +286,13 @@ function createRow(data) {
       } else {
         let select = document.createElement("select");
         select.innerHTML = `
-                    <option value="new">${STATUS_TITLES["new"]}</option>
-                    <option value="progress">${STATUS_TITLES["progress"]}</option>
-                    <option value="sentToConfirm">${STATUS_TITLES["sentToConfirm"]}</option>
-                    <option value="confirmed">${STATUS_TITLES["confirmed"]}</option>
-                    <option value="taskOnClock">${STATUS_TITLES["taskOnClock"]}</option>
-                    <option value="paid">${STATUS_TITLES["paid"]}</option>
-                `;
+            <option value="new">${STATUS_TITLES["new"]}</option>
+            <option value="progress">${STATUS_TITLES["progress"]}</option>
+            <option value="sentToConfirm">${STATUS_TITLES["sentToConfirm"]}</option>
+            <option value="confirmed">${STATUS_TITLES["confirmed"]}</option>
+            <option value="taskOnClock">${STATUS_TITLES["taskOnClock"]}</option>
+            <option value="paid">${STATUS_TITLES["paid"]}</option>
+        `;
         targetElem.append(select);
         select.addEventListener("change", () => {
           targetElem.classList.remove("editing");
@@ -430,6 +430,9 @@ function requestTasks(callback) {
   };
 }
 document.addEventListener("DOMContentLoaded", () => {
+
+  if (document.body.className === "login") return;
+
   taskSortInit();
   ROLE = document.body.className;
 
